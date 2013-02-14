@@ -1,1 +1,3 @@
-/src/jelly.js
+src/jelly.compiled.js
+src/jelly.map
+out/

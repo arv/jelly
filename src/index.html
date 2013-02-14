@@ -35,7 +35,7 @@ select#level {
   border-spacing: 0;
   background: #ccc;
   background-size: 36px 36px;
-  background-image: -webkit-linear-gradient(-45deg,
+  background-image: linear-gradient(-45deg,
     #ccc 25%, #bbb 25%, #bbb 50%, #ccc 50%, #ccc 75%, #bbb 75%);
 }
 #stage table td {
@@ -45,6 +45,8 @@ select#level {
   width: 48px;
   height: 48px;
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
+
 }
 .transparent {
   background: #eef7ff;
@@ -53,8 +55,8 @@ select#level {
 }
 .jellybox {
   position: absolute;
-  -webkit-transition-property: left;
-  -webkit-transition-duration: 200ms;
+  transition-property: left;
+  transition-duration: 200ms;
 }
 .jelly {
   position: absolute;
@@ -75,30 +77,30 @@ select#level {
 
 @-webkit-keyframes slideRight {
   0% {
-    -webkit-transform: none;
+    transform: none;
   }
   50% {
-    -webkit-transform: skew(-10deg, 0);
+    transform: skew(-10deg, 0);
   }
   60% {
-    -webkit-transform: skew(5deg, 0);
+    transform: skew(5deg, 0);
   }
   100% {
-    -webkit-transform: none;
+    transform: none;
   }
 }
 @-webkit-keyframes slideLeft {
   0% {
-    -webkit-transform: none;
+    transform: none;
   }
   50% {
-    -webkit-transform: skew(10deg, 0);
+    transform: skew(10deg, 0);
   }
   60% {
-    -webkit-transform: skew(-5deg, 0);
+    transform: skew(-5deg, 0);
   }
   100% {
-    -webkit-transform: none;
+    transform: none;
   }
 }
 </style>
@@ -113,16 +115,12 @@ only.  The game design and levels are taken directly from that. If you
 can run the Windows version I highly recommend it as it has a lot of
 great extra details.</p>
 
+<p>This is a port of <a href='https://github.com/martine/jelly'>martine's</a>
+CoffeeScript version to ES6 with some bug fixes included.</p>
+
 <div id='stage'>
 <div id='map'></div>
-<select id='level'>
-  <option value='0'>Level 1</option>
-  <option value='1'>Level 2</option>
-  <option value='2'>Level 3 [broken]</option>
-  <option value='3'>Level 4</option>
-  <option value='4'>Level 5</option>
-  <option value='5'>Level 6</option>
-</select>
+<select id='level'></select>
 <button id='reset'>Reset</button>
 </div>
 
@@ -130,16 +128,16 @@ great extra details.</p>
   right.  When jellies of the same color touch they merge.
   Your objective is to unify all jellies of the same color.</p>
 
-<p><a href='https://github.com/martine/jelly'>Here's the source</a>.
+<p><a href='https://github.com/arv/jelly'>Here's the source</a>.
   To be implemented:
   <ol>
-    <li>Pushing of blocks (necessary for level 3).</li>
     <li>A "you win" screen when you win.</li>
 </ol></p>
 
 <p><small>* It is WebKit-only because CSS prefixes are dumb and I
   don't have the patience to test on other browsers.</small></p>
 
-<script src='jelly.js'></script>
+<script src='../traceur/src/runtime/runtime.js'></script>
+<script src='jelly.compiled.js'></script>
 </body>
 </html>

@@ -1,0 +1,3 @@
+[submodule "traceur"]
+	path = traceur
+	url = https://arv%40chromium.org@code.google.com/p/traceur-compiler/
