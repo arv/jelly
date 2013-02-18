@@ -62,10 +62,10 @@ var levels = [
 
 var CELL_SIZE = 48;
 
-// TODO: moz, ms, op.
-var animation = 'webkitAnimation';
-var animationName = 'webkitAnimationName';
-var animationEnd = 'webkitAnimationEnd';
+var oldWebKit = !('animation' in document.documentElement.style);
+var animation = oldWebKit ? 'webkitAnimation' : 'animation';
+var animationName = oldWebKit ? 'webkitAnimationName' : 'animationName';
+var animationEnd = oldWebKit ? 'webkitAnimationEnd' : 'animationend';
 
 function moveToCell(dom, x, y) {
   dom.style.left = x * CELL_SIZE + 'px';

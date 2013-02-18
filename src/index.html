@@ -77,6 +77,35 @@ select#level {
 
 @-webkit-keyframes slideRight {
   0% {
+    -webkit-transform: none;
+  }
+  50% {
+    -webkit-transform: skew(-10deg, 0);
+  }
+  60% {
+    -webkit-transform: skew(5deg, 0);
+  }
+  100% {
+    -webkit-transform: none;
+  }
+}
+@-webkit-keyframes slideLeft {
+  0% {
+    -webkit-transform: none;
+  }
+  50% {
+    -webkit-transform: skew(10deg, 0);
+  }
+  60% {
+    -webkit-transform: skew(-5deg, 0);
+  }
+  100% {
+    -webkit-transform: none;
+  }
+}
+
+@keyframes slideRight {
+  0% {
     transform: none;
   }
   50% {
@@ -89,7 +118,7 @@ select#level {
     transform: none;
   }
 }
-@-webkit-keyframes slideLeft {
+@keyframes slideLeft {
   0% {
     transform: none;
   }
@@ -103,12 +132,13 @@ select#level {
     transform: none;
   }
 }
+
 </style>
 </head>
 <body>
 <h1>jelly</h1>
 
-<p>This is a (WebKit-only*) HTML5 clone
+<p>This is a HTML5 clone
 of <a href='http://qrostar.skr.jp/index.cgi?page=jelly&lang=en'>Jelly
 no Puzzle</a>, an excellent puzzle game that was released for Windows
 only.  The game design and levels are taken directly from that. If you
@@ -133,9 +163,6 @@ CoffeeScript version to ES6 with some bug fixes included.</p>
   <ol>
     <li>A "you win" screen when you win.</li>
 </ol></p>
-
-<p><small>* It is WebKit-only because CSS prefixes are dumb and I
-  don't have the patience to test on other browsers.</small></p>
 
 <script src='../traceur/src/runtime/runtime.js'></script>
 <script src='jelly.compiled.js'></script>
