@@ -1,4 +1,15 @@
 var levels = [
+  // [ 'xxxxxxxxxxxxxx',
+  //   'x            x',
+  //   'x            x',
+  //   'x            x',
+  //   'x            x',
+  //   'x            x',
+  //   'x            x',
+  //   'x R    r     x',
+  //   'x xxxxxxxxxxxx',
+  //   'xxxxxxxxxxxxxx', ],
+
   [ 'xxxxxxxxxxxxxx',
     'x            x',
     'x            x',
@@ -57,6 +68,28 @@ var levels = [
     'x       r xxxx',
     'x   xxxxxxxxxx',
     'xxxxxxxxxxxxxx', ],
+
+  [ 'xxxxxxxxxxxxxx',
+    'x            x',
+    'x          r x',
+    'x          x x',
+    'x     b   b  x',
+    'x     x  rr  x',
+    'x         x  x',
+    'x R  Bx x x  x',
+    'x x  xx x x  x',
+    'xxxxxxxxxxxxxx', ],
+
+  [ 'xxxxxxxxxxxxxx',
+    'xxx  x  x   xx',
+    'xx   g  b   xx',
+    'xx   x  x   xx',
+    'xx   B  G   xx',
+    'xxg        bxx',
+    'xxxg      bxxx',
+    'xxxx      xxxx',
+    'xxxxxxxxxxxxxx',
+    'xxxxxxxxxxxxxx', ],
   ]
 
 
@@ -74,6 +107,10 @@ function moveToCell(dom, x, y) {
 
 function isJelly(object) {
   return object instanceof Jelly;
+}
+
+function isFixed(color) {
+  return 'RGB'.indexOf(color) >= 0;
 }
 
 class Stage {
@@ -104,8 +141,9 @@ class Stage {
       var tr = document.createElement('tr');
       table.appendChild(tr);
       return row.map((char, x) => {
-        var color = null
-        var cell = null
+        var color = null;
+        var cell = null;
+        var fixed = isFixed(row[x]);
         switch (row[x]) {
           case 'x':
             cell = document.createElement('td');
@@ -113,13 +151,17 @@ class Stage {
             tr.appendChild(cell);
             break;
           case 'r':
+          case 'R':
             color = 'red';
             break;
           case 'g':
+          case 'G':
             color = 'green';
             break;
           case 'b':
+          case 'B':
             color = 'blue';
+            break;
         }
 
         if (!cell) {
@@ -129,7 +171,8 @@ class Stage {
         }
 
         if (color) {
-          var jelly = new Jelly(this, x, y, color);
+          var jelly = new Jelly(this, x, y, color, fixed);
+
           this.dom.appendChild(jelly.dom);
           this.jellies.push(jelly);
           cell = jelly;
@@ -138,7 +181,8 @@ class Stage {
         return cell;
       });
     });
-    this.addBorders()
+    this.addBorders();
+    this.addLocks();
   }
 
   addBorders() {
@@ -167,8 +211,14 @@ class Stage {
     }
   }
 
+  addLocks() {
+    for (var jelly of this.jellies) {
+      if (jelly.isFixed)
+        jelly.addLock();
+    }
+  }
+
   trySlide(jelly, dir) {
-    // if (this.checkFilled(jelly, dir, 0))
     if (!this.canMove(jelly, dir))
       return;
     this.busy = true;
@@ -197,6 +247,10 @@ class Stage {
     }
   }
 
+  isWallAt(x, y) {
+    return this.cells[y][x] != null && !isJelly(this.cells[y][x]);
+  }
+
   checkFilled(jelly, dx, dy) {
     for (var [x, y] of jelly.cellCoords()) {
       var next = this.cells[y + dy][x + dx];
@@ -207,6 +261,8 @@ class Stage {
   }
 
   canMove(jelly, dir) {
+    if (jelly.isFixed)
+      return false;
     for (var object of this.getAdjacentObjects(jelly, dir)) {
       // TODO: The wall should be objects too.
       if (!isJelly(object))
@@ -297,10 +353,12 @@ class JellyCell {
 }
 
 class Jelly {
-  constructor(stage, x, y, color) {
+  constructor(stage, x, y, color, fixed) {
+    this.stage = stage;
     this.x = x;
     this.y = y;
     this.color = color;
+    this.isFixed = fixed;
     this.dom = document.createElement('div');
     this.updatePosition(this.x, this.y);
     this.dom.className = 'cell jellybox';
@@ -372,6 +430,25 @@ class Jelly {
           cell.dom.style.borderTop = 'none';
       }
     }
+
+    this.isFixed = this.isFixed || other.isFixed;
+  }
+
+  addLock() {
+    var lock = document.createElement('div');
+    this.cells[0].dom.appendChild(lock);
+    var stage = this.stage;
+    var lockDir = 'above';
+    if (stage.isWallAt(this.x, this.y - 1))
+      lockDir = 'above';
+    else if (stage.isWallAt(this.x, this.y + 1))
+      lockDir = 'below';
+    else if (stage.isWallAt(this.x - 1, this.y))
+      lockDir = 'left';
+    else
+      lockDir = 'right';
+
+    lock.className = `lock ${lockDir}`;
   }
 }
 

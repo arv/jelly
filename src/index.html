@@ -75,6 +75,29 @@ select#level {
   border: solid 1px hsl(120, 100%, 30%);
 }
 
+.lock {
+  background: inherit;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  border: 1px solid;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border-color: inherit;
+}
+.lock.below {
+  bottom: -16px;
+  left: 15px;
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+}
+.lock.above {
+  top: -16px;
+  left: 15px;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+}
+
 @-webkit-keyframes slideRight {
   0% {
     -webkit-transform: none;
