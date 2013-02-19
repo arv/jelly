@@ -302,7 +302,7 @@ class Stage {
     while (moved) {
       moved = false;
       for (var jelly of this.jellies) {
-        if (!this.checkFilled(jelly, 0, 1)) {
+        if (!jelly.isFixed && !this.checkFilled(jelly, 0, 1)) {
           this.move(jelly, 0, 1);
           moved = true;
         }
