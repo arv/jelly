@@ -265,7 +265,7 @@ class Stage {
       return false;
     for (var object of this.getAdjacentObjects(jelly, dir)) {
       // TODO: The wall should be objects too.
-      if (!isJelly(object))
+      if (!isJelly(object) || object.isFixed)
         return false;
       // TODO: Check if jelly is fixed (needed for later levels)
     }
