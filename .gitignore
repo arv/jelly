@@ -1,3 +1,4 @@
-src/jelly.compiled.js
-src/jelly.map
+jelly.src
+jelly.map
 out/
+node_modules
