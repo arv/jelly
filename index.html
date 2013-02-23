@@ -4,33 +4,52 @@
 <title>jelly no puzzle in html5</title>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <style>
+
+* {
+  -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
+  -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+  /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
 body {
   line-height: 1.6em;
   max-width: 674px;
   margin: 4ex;
   font-family: 'Open Sans', sans-serif;
 }
+
 h1 {
   font-weight: normal;
 }
+
 #stage {
   position: relative;
   user-select: none;
   display: inline-block;
   border: solid 1px #777;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
+
 select#level {
   position: absolute;
   top: 8px;
   right: 8px;
   font: inherit;
 }
+
 #reset {
   position: absolute;
   bottom: 8px;
   right: 8px;
   font: inherit;
 }
+
 #stage table {
   border-spacing: 0;
   background: #ccc;
@@ -40,9 +59,11 @@ select#level {
   background-image: linear-gradient(-45deg,
     #ccc 25%, #bbb 25%, #bbb 50%, #ccc 50%, #ccc 75%, #bbb 75%);
 }
+
 #stage table td {
   padding: 0;
 }
+
 .cell {
   width: 48px;
   height: 48px;
@@ -50,11 +71,14 @@ select#level {
   -moz-box-sizing: border-box;
 
 }
+
 .transparent {
   background: #eef7ff;
 }
+
 .wall {
 }
+
 .jellybox {
   position: absolute;
   -webkit-transition:
@@ -68,18 +92,33 @@ select#level {
     /* falling animation: roughly x^2. */
     top 200ms cubic-bezier(0.5,0, 1,0.5);
 }
+
 .jelly {
   position: absolute;
-  cursor: ew-resize;
 }
+
+.jellybox {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+
+.jellybox:active {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
+}
+
 .red {
   background: hsl(0, 100%, 75%);
   border: solid 1px hsl(0, 100%, 30%);
 }
+
 .blue {
   background: hsl(216, 100%, 70%);
   border: solid 1px hsl(216, 100%, 30%);
 }
+
 .green {
   background: hsl(120, 100%, 45%);
   border: solid 1px hsl(120, 100%, 30%);
@@ -95,12 +134,14 @@ select#level {
   -moz-box-sizing: border-box;
   border-color: inherit;
 }
+
 .lock.below {
   bottom: -16px;
   left: 15px;
   border-top: 0;
   border-radius: 0 0 8px 8px;
 }
+
 .lock.above {
   top: -16px;
   left: 15px;
@@ -181,23 +222,26 @@ great extra details.</p>
 <p>This is a port of <a href='https://github.com/martine/jelly'>martine's</a>
 CoffeeScript version to ES6 with some bug fixes included.</p>
 
+<script src="third_party/PointerEvents/src/pointerevents.js"></script>
+<script src='traceur/src/runtime/runtime.js'></script>
+
 <div id='stage'>
 <div id='map'></div>
 <select id='level'></select>
 <button id='reset'>Reset</button>
 </div>
 
-<p>How to play: left and right mouse button moves jellies left and
-  right.  When jellies of the same color touch they merge.
-  Your objective is to unify all jellies of the same color.</p>
+<script src='jelly.js'></script>
+
+<p>How to play: drag the jellies left or right.  When jellies of the same color
+touch they merge. Your objective is to unify all jellies of the same color.</p>
 
 <p><a href='https://github.com/arv/jelly'>Here's the source</a>.
-  To be implemented:
-  <ol>
-    <li>A "you win" screen when you win.</li>
-</ol></p>
+To be implemented:</p>
 
-<script src='traceur/src/runtime/runtime.js'></script>
-<script src='jelly.js'></script>
+<ol>
+  <li>A "you win" screen when you win.</li>
+</ol>
+
 </body>
 </html>

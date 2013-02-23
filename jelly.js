@@ -40,19 +40,7 @@ var Stage = function() {
         e.preventDefault();
         if (this.busy) e.stopPropagation();
       }).bind(this);
-      {
-        var $__4 = traceur.runtime.getIterator(['contextmenu', 'click']);
-        try {
-          while (true) {
-            var event = $__4.next();
-            {
-              this.dom.addEventListener(event, maybeSwallowEvent, true);
-            }
-          }
-        } catch (e) {
-          if (!traceur.runtime.isStopIteration(e)) throw e;
-        }
-      }
+      this.dom.setAttribute('touch-action', 'none');
       this.checkForMerges();
     },
     loadMap: function(map) {
@@ -145,7 +133,6 @@ var Stage = function() {
     },
     waitForAnimation: function(cb) {
       var end = (function() {
-        console.log('end');
         this.dom.removeEventListener(transitionEnd, end);
         cb();
       }).bind(this);
@@ -375,11 +362,24 @@ var Jelly = function() {
       var cell = new JellyCell(this, 0, 0, this.color);
       this.dom.appendChild(cell.dom);
       this.cells = [cell];
-      this.dom.addEventListener('contextmenu', (function(e) {
-        stage.trySlide(this, 1);
-      }).bind(this));
-      this.dom.addEventListener('click', (function(e) {
-        stage.trySlide(this, - 1);
+      this.dom.addEventListener('pointerdown', (function(e) {
+        var startX = e.clientX;
+        var move = (function(e) {
+          e.preventDefault();
+          var distance = Math.abs(e.clientX - startX);
+          if (this.stage.busy || distance < 24) return;
+          var dir = e.clientX - startX < 0 ? - 1: 1;
+          stage.trySlide(this, dir);
+          startX += dir * 48;
+        }).bind(this);
+        var doc = this.dom.ownerDocument;
+        var end = (function() {
+          doc.removeEventListener('pointermove', move, true);
+          doc.removeEventListener('pointerup', end, true);
+        });
+        doc.addEventListener('pointermove', move, true);
+        doc.addEventListener('pointerup', end, true);
+        e.preventDefault();
       }).bind(this));
     },
     cellCoords: function() {

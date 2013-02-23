@@ -127,10 +127,9 @@ class Stage {
       if (this.busy)
         e.stopPropagation();
     };
-    for (var event of ['contextmenu', 'click']) {
-      this.dom.addEventListener(event, maybeSwallowEvent, true)
-    }
 
+    // PointerEvents polyfill uses this to disable scroll etc.
+    this.dom.setAttribute('touch-action', 'none');
     this.checkForMerges();
   }
 
@@ -221,7 +220,6 @@ class Stage {
 
   waitForAnimation(cb) {
     var end = () => {
-      console.log('end');
       this.dom.removeEventListener(transitionEnd, end);
       cb();
     };
@@ -384,11 +382,29 @@ class Jelly {
     this.dom.appendChild(cell.dom);
     this.cells = [cell];
 
-    this.dom.addEventListener('contextmenu', (e) => {
-      stage.trySlide(this, 1);
-    });
-    this.dom.addEventListener('click', (e) => {
-      stage.trySlide(this, -1);
+    this.dom.addEventListener('pointerdown', (e) => {
+      var startX = e.clientX;
+
+      var move = (e) => {
+        e.preventDefault();
+        var distance = Math.abs(e.clientX - startX);
+        if (this.stage.busy || distance < 24)
+          return;
+
+        var dir = e.clientX - startX < 0 ? -1 : 1;
+        stage.trySlide(this, dir);
+        startX += dir * 48;
+      };
+
+      var doc = this.dom.ownerDocument;
+      var end = () => {
+        doc.removeEventListener('pointermove', move, true);
+        doc.removeEventListener('pointerup', end, true);
+      };
+
+      doc.addEventListener('pointermove', move, true);
+      doc.addEventListener('pointerup', end, true);
+      e.preventDefault();
     });
   }
 
