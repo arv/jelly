@@ -99,6 +99,7 @@ var oldWebKit = !('animation' in document.documentElement.style);
 var animation = oldWebKit ? 'webkitAnimation' : 'animation';
 var animationName = oldWebKit ? 'webkitAnimationName' : 'animationName';
 var animationEnd = oldWebKit ? 'webkitAnimationEnd' : 'animationend';
+var transitionEnd = oldWebKit ? 'webkitTransitionEnd' : 'transitionend';
 
 function moveToCell(dom, x, y) {
   dom.style.left = x * CELL_SIZE + 'px';
@@ -218,20 +219,30 @@ class Stage {
     }
   }
 
+  waitForAnimation(cb) {
+    var end = () => {
+      console.log('end');
+      this.dom.removeEventListener(transitionEnd, end);
+      cb();
+    };
+    this.dom.addEventListener(transitionEnd, end);
+  }
+
   trySlide(jelly, dir) {
     if (!this.canMove(jelly, dir))
       return;
+
     this.busy = true;
     var jellies = this.getAdjacentObjects(jelly, dir).filter(isJelly);
     jellies.reverse().forEach((jelly) => {
       this.move(jelly, dir, 0);
+    });
 
-      jelly.slide(dir, () => {
-        this.checkFall();
+    this.waitForAnimation(() => {
+      this.checkFall(() => {
         this.checkForMerges();
         this.busy = false;
-      });
-
+      })
     });
   }
 
@@ -297,17 +308,23 @@ class Stage {
     return found;
   }
 
-  checkFall() {
-    var moved = true
-    while (moved) {
-      moved = false;
+  checkFall(cb) {
+    var moved = false;
+    var didOneMove = true;
+    while (didOneMove) {
+      didOneMove = false;
       for (var jelly of this.jellies) {
         if (!jelly.isFixed && !this.checkFilled(jelly, 0, 1)) {
           this.move(jelly, 0, 1);
           moved = true;
+          didOneMove = true;
         }
       }
     }
+    if (moved)
+      this.waitForAnimation(cb);
+    else
+      cb();
   }
 
   checkForMerges() {
