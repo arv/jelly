@@ -363,9 +363,11 @@ var Jelly = function() {
       this.dom.appendChild(cell.dom);
       this.cells = [cell];
       this.dom.addEventListener('pointerdown', (function(e) {
+        var pointerId = e.pointerId;
         var startX = e.clientX;
         var move = (function(e) {
           e.preventDefault();
+          if (e.pointerId !== pointerId) return;
           var distance = Math.abs(e.clientX - startX);
           if (this.stage.busy || distance < 24) return;
           var dir = e.clientX - startX < 0 ? - 1: 1;
@@ -374,6 +376,7 @@ var Jelly = function() {
         }).bind(this);
         var doc = this.dom.ownerDocument;
         var end = (function() {
+          if (e.pointerId !== pointerId) return;
           doc.removeEventListener('pointermove', move, true);
           doc.removeEventListener('pointerup', end, true);
         });

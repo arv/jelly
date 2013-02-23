@@ -383,10 +383,14 @@ class Jelly {
     this.cells = [cell];
 
     this.dom.addEventListener('pointerdown', (e) => {
+      var pointerId = e.pointerId;
       var startX = e.clientX;
 
       var move = (e) => {
         e.preventDefault();
+        if (e.pointerId !== pointerId)
+          return;
+
         var distance = Math.abs(e.clientX - startX);
         if (this.stage.busy || distance < 24)
           return;
@@ -398,6 +402,9 @@ class Jelly {
 
       var doc = this.dom.ownerDocument;
       var end = () => {
+        if (e.pointerId !== pointerId)
+          return;
+
         doc.removeEventListener('pointermove', move, true);
         doc.removeEventListener('pointerup', end, true);
       };
