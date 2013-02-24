@@ -1,74 +1,247 @@
 <!DOCTYPE html>
 <html>
+<head>
+<title>jelly no puzzle in html5</title>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<style>
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Jelly : jelly no puzzle in html5" />
+* {
+  -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
+  -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+  /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+body {
+  line-height: 1.6em;
+  max-width: 674px;
+  margin: 4ex;
+  font-family: 'Open Sans', sans-serif;
+}
 
-    <title>Jelly</title>
-  </head>
+h1 {
+  font-weight: normal;
+}
 
-  <body>
+#stage {
+  position: relative;
+  user-select: none;
+  display: inline-block;
+  border: solid 1px #777;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/arv/jelly">View on GitHub</a>
+select#level {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font: inherit;
+}
 
-          <h1 id="project_title">Jelly</h1>
-          <h2 id="project_tagline">jelly no puzzle in html5</h2>
+#reset {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font: inherit;
+}
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/arv/jelly/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/arv/jelly/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+#stage table {
+  border-spacing: 0;
+  background: #ccc;
+  background-size: 36px 36px;
+  background-image: -webkit-linear-gradient(-45deg,
+    #ccc 25%, #bbb 25%, #bbb 50%, #ccc 50%, #ccc 75%, #bbb 75%);
+  background-image: linear-gradient(-45deg,
+    #ccc 25%, #bbb 25%, #bbb 50%, #ccc 50%, #ccc 75%, #bbb 75%);
+}
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
+#stage table td {
+  padding: 0;
+}
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+.cell {
+  width: 48px;
+  height: 48px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+}
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+.transparent {
+  background: #eef7ff;
+}
 
-<h3>Designer Templates</h3>
+.wall {
+}
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+.jellybox {
+  position: absolute;
+  -webkit-transition:
+    /* sliding animation. */
+    left 200ms,
+    /* falling animation: roughly x^2. */
+    top 200ms cubic-bezier(0.5,0, 1,0.5);
+  transition:
+    /* sliding animation. */
+    left 200ms,
+    /* falling animation: roughly x^2. */
+    top 200ms cubic-bezier(0.5,0, 1,0.5);
+}
 
-<h3>Rather Drive Stick?</h3>
+.jelly {
+  position: absolute;
+}
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+.jellybox {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
 
-<h3>Authors and Contributors</h3>
+.jellybox:active {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
+}
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+.red {
+  background: hsl(0, 100%, 75%);
+  border: solid 1px hsl(0, 100%, 30%);
+}
 
-<h3>Support or Contact</h3>
+.blue {
+  background: hsl(216, 100%, 70%);
+  border: solid 1px hsl(216, 100%, 30%);
+}
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
+.green {
+  background: hsl(120, 100%, 45%);
+  border: solid 1px hsl(120, 100%, 30%);
+}
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Jelly maintained by <a href="https://github.com/arv">arv</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+.lock {
+  background: inherit;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  border: 1px solid;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border-color: inherit;
+}
 
-    
+.lock.below {
+  bottom: -16px;
+  left: 15px;
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+}
 
-  </body>
+.lock.above {
+  top: -16px;
+  left: 15px;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+}
+
+@-webkit-keyframes slideRight {
+  0% {
+    -webkit-transform: none;
+  }
+  50% {
+    -webkit-transform: skew(-10deg, 0);
+  }
+  60% {
+    -webkit-transform: skew(5deg, 0);
+  }
+  100% {
+    -webkit-transform: none;
+  }
+}
+@-webkit-keyframes slideLeft {
+  0% {
+    -webkit-transform: none;
+  }
+  50% {
+    -webkit-transform: skew(10deg, 0);
+  }
+  60% {
+    -webkit-transform: skew(-5deg, 0);
+  }
+  100% {
+    -webkit-transform: none;
+  }
+}
+
+@keyframes slideRight {
+  0% {
+    transform: none;
+  }
+  50% {
+    transform: skew(-10deg, 0);
+  }
+  60% {
+    transform: skew(5deg, 0);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes slideLeft {
+  0% {
+    transform: none;
+  }
+  50% {
+    transform: skew(10deg, 0);
+  }
+  60% {
+    transform: skew(-5deg, 0);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+</style>
+</head>
+<body>
+<h1>jelly</h1>
+
+<p>This is a HTML5 clone
+of <a href='http://qrostar.skr.jp/index.cgi?page=jelly&lang=en'>Jelly
+no Puzzle</a>, an excellent puzzle game that was released for Windows
+only.  The game design and levels are taken directly from that. If you
+can run the Windows version I highly recommend it as it has a lot of
+great extra details.</p>
+
+<p>This is a port of <a href='https://github.com/martine/jelly'>martine's</a>
+CoffeeScript version to ES6 with some bug fixes included.</p>
+
+<script src="third_party/PointerEvents/src/pointerevents.js"></script>
+<script src='traceur-runtime.js'></script>
+
+<div id='stage'>
+<div id='map'></div>
+<select id='level'></select>
+<button id='reset'>Reset</button>
+</div>
+
+<script src='jelly.js'></script>
+
+<p>How to play: drag the jellies left or right.  When jellies of the same color
+touch they merge. Your objective is to unify all jellies of the same color.</p>
+
+<p><a href='https://github.com/arv/jelly'>Here's the source</a>.
+To be implemented:</p>
+
+<ol>
+  <li>A "you win" screen when you win.</li>
+</ol>
+
+</body>
 </html>
