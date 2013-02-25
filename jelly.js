@@ -1,3 +1,4 @@
+'use strict';
 var $__getDescriptors = function(object) {
   var descriptors = {}, name, names = Object.getOwnPropertyNames(object);
   for (var i = 0; i < names.length; i++) {
@@ -29,21 +30,30 @@ function isJelly(object) {
 function isFixed(color) {
   return 'RGB'.indexOf(color) >= 0;
 }
+function getColor(symbol) {
+  switch (symbol) {
+    case 'r':
+    case 'R':
+      return 'red';
+    case 'g':
+    case 'G':
+      return 'green';
+    case 'b':
+    case 'B':
+      return 'blue';
+  }
+}
 var Stage = function() {
   var $Stage = ($__createClassNoExtends)({
     constructor: function(dom, map) {
       this.dom = dom;
-      this.jellies = [];
-      this.loadMap(map);
       this.busy = false;
-      var maybeSwallowEvent = (function(e) {
-        e.preventDefault();
-        if (this.busy) e.stopPropagation();
-      }).bind(this);
-      this.dom.setAttribute('touch-action', 'none');
-      this.checkForMerges();
+      this.loadMap(map);
     },
     loadMap: function(map) {
+      this.undoStack = [];
+      this.jellies = [];
+      this.dom.textContent = '';
       var table = document.createElement('table');
       this.dom.appendChild(table);
       this.cells = map.map((function(line, y) {
@@ -51,44 +61,27 @@ var Stage = function() {
         var tr = document.createElement('tr');
         table.appendChild(tr);
         return row.map((function(char, x) {
-          var color = null;
-          var cell = null;
-          var fixed = isFixed(row[x]);
-          switch (row[x]) {
-            case 'x':
-              cell = document.createElement('td');
-              cell.className = 'cell wall';
-              tr.appendChild(cell);
-              break;
-            case 'r':
-            case 'R':
-              color = 'red';
-              break;
-            case 'g':
-            case 'G':
-              color = 'green';
-              break;
-            case 'b':
-            case 'B':
-              color = 'blue';
-              break;
+          if (row[x] === 'x') {
+            var wall = document.createElement('td');
+            wall.className = 'cell wall';
+            tr.appendChild(wall);
+            return wall;
           }
-          if (!cell) {
-            var td = document.createElement('td');
-            td.className = 'transparent';
-            tr.appendChild(td);
-          }
-          if (color) {
-            var jelly = new Jelly(this, x, y, color, fixed);
+          var td = document.createElement('td');
+          td.className = 'transparent';
+          tr.appendChild(td);
+          if (row[x] !== ' ') {
+            var jelly = new Jelly(this, x, y, row[x]);
             this.dom.appendChild(jelly.dom);
             this.jellies.push(jelly);
-            cell = jelly;
+            return jelly;
           }
-          return cell;
+          return null;
         }).bind(this));
       }).bind(this));
       this.addBorders();
       this.addLocks();
+      this.checkForMerges();
     },
     addBorders: function() {
       for (var y = 0; y < this.cells.length; y++) {
@@ -140,6 +133,7 @@ var Stage = function() {
     },
     trySlide: function(jelly, dir) {
       if (!this.canMove(jelly, dir)) return;
+      this.saveState();
       this.busy = true;
       var jellies = this.getAdjacentObjects(jelly, dir).filter(isJelly);
       jellies.reverse().forEach((function(jelly) {
@@ -334,6 +328,52 @@ var Stage = function() {
         }
       }
       return null;
+    },
+    saveState: function() {
+      var rows = [];
+      {
+        var $__4 = traceur.runtime.getIterator(this.cells);
+        try {
+          while (true) {
+            var row = $__4.next();
+            {
+              var s = '';
+              {
+                var $__6 = traceur.runtime.getIterator(row);
+                try {
+                  while (true) {
+                    var cell = $__6.next();
+                    {
+                      if (isJelly(cell)) s += cell.symbol; else if (cell) s += 'x'; else s += ' ';
+                    }
+                  }
+                } catch (e) {
+                  if (!traceur.runtime.isStopIteration(e)) throw e;
+                }
+              }
+              rows.push(s);
+            }
+          }
+        } catch (e) {
+          if (!traceur.runtime.isStopIteration(e)) throw e;
+        }
+      }
+      this.undoStack.push(rows);
+    },
+    get canUndo() {
+      return this.undoStack.length > 0;
+    },
+    undo: function() {
+      var state = this.undoStack.pop();
+      if (!state) return;
+      var undoStack = this.undoStack;
+      this.loadMap(state);
+      this.undoStack = undoStack;
+    },
+    reset: function() {
+      var state = this.undoStack[0];
+      if (!state) return;
+      this.loadMap(state);
     }
   }, {});
   return $Stage;
@@ -350,12 +390,13 @@ var JellyCell = function() {
 }();
 var Jelly = function() {
   var $Jelly = ($__createClassNoExtends)({
-    constructor: function(stage, x, y, color, fixed) {
+    constructor: function(stage, x, y, symbol) {
       this.stage = stage;
       this.x = x;
       this.y = y;
-      this.color = color;
-      this.isFixed = fixed;
+      this.symbol = symbol;
+      this.color = getColor(symbol);
+      this.isFixed = isFixed(symbol);
       this.dom = document.createElement('div');
       this.updatePosition(this.x, this.y);
       this.dom.className = 'cell jellybox';
@@ -389,10 +430,10 @@ var Jelly = function() {
       var $__1 = 0, $__2 = [], $__3 = this;
       return (function() {
         {
-          var $__6 = traceur.runtime.getIterator($__3.cells);
+          var $__4 = traceur.runtime.getIterator($__3.cells);
           try {
             while (true) {
-              var cell = $__6.next();
+              var cell = $__4.next();
               $__2[$__1++] = [$__3.x + cell.x, $__3.y + cell.y];
             }
           } catch (e) {
@@ -421,10 +462,10 @@ var Jelly = function() {
       var dx = other.x - this.x;
       var dy = other.y - this.y;
       {
-        var $__6 = traceur.runtime.getIterator(other.cells);
+        var $__4 = traceur.runtime.getIterator(other.cells);
         try {
           while (true) {
-            var cell = $__6.next();
+            var cell = $__4.next();
             {
               this.cells.push(cell);
               cell.x += dx;
@@ -446,10 +487,10 @@ var Jelly = function() {
             var cell = $__5.next();
             {
               {
-                var $__4 = traceur.runtime.getIterator(this.cells);
+                var $__6 = traceur.runtime.getIterator(this.cells);
                 try {
                   while (true) {
-                    var othercell = $__4.next();
+                    var othercell = $__6.next();
                     {
                       if (othercell == cell) continue;
                       if (othercell.x == cell.x + 1 && othercell.y == cell.y) cell.dom.style.borderRight = 'none'; else if (othercell.x == cell.x - 1 && othercell.y == cell.y) cell.dom.style.borderLeft = 'none'; else if (othercell.x == cell.x && othercell.y == cell.y + 1) cell.dom.style.borderBottom = 'none'; else if (othercell.x == cell.x && othercell.y == cell.y - 1) cell.dom.style.borderTop = 'none';
@@ -478,10 +519,9 @@ var Jelly = function() {
   }, {});
   return $Jelly;
 }();
-function resetLevel() {
+function loadLevel() {
   var level = + location.hash.slice(1) || 0;
-  if (stage && stage.dom) stage.dom.textContent = '';
-  stage = new Stage(document.getElementById('map'), levels[level]);
+  if (!stage) stage = new Stage(document.getElementById('map'), levels[level]); else stage.loadMap(levels[level]);
   var levelPicker = document.getElementById('level');
   levelPicker.value = level;
 }
@@ -493,8 +533,14 @@ for (var i = 0; i < levels.length; i++) {
   var option = new Option(("Level " + (i + 1)), i);
   levelPicker.appendChild(option);
 }
-resetLevel();
-document.getElementById('reset').addEventListener('click', resetLevel);
-window.addEventListener('hashchange', resetLevel);
+var stage;
+loadLevel();
+document.getElementById('undo').onclick = (function() {
+  return stage.undo();
+});
+document.getElementById('reset').onclick = (function() {
+  return stage.reset();
+});
+window.addEventListener('hashchange', loadLevel);
 
 //@ sourceMappingURL=jelly.map
