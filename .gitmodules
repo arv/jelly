@@ -3,4 +3,4 @@
 	url = https://arv%40chromium.org@code.google.com/p/traceur-compiler/
 [submodule "third_party/PointerEvents"]
 	path = third_party/PointerEvents
-	url = git@github.com:toolkitchen/PointerEvents.git
+	url = git://github.com/toolkitchen/PointerEvents.git
