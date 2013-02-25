@@ -318,6 +318,25 @@ class Stage {
         this.cells[y][x] = jelly;
       }
     }
+    this.checkForCompletion();
+  }
+
+  get done() {
+    return this._done;
+  }
+
+  checkForCompletion() {
+    var colors = {};
+    for (var jelly of this.jellies) {
+      colors[jelly.color] = true;
+    }
+
+    var done = Object.keys(colors).length === this.jellies.length;
+    if (done != this._done) {
+      this._done = done;
+      if (this.onDoneChange)
+        this.onDoneChange();
+    }
   }
 
   doOneMerge() {
@@ -538,6 +557,10 @@ for (var i = 0; i < levels.length; i++) {
 var stage;
 
 loadLevel();
+
+stage.onDoneChange = () => {
+  document.getElementById('done').style.display = stage.done ? 'block' : '';
+}
 
 document.getElementById('undo').onclick = () => stage.undo();
 document.getElementById('reset').onclick = () => stage.reset();

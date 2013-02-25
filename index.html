@@ -154,6 +154,23 @@ select#level {
   border-radius: 8px 8px 0 0;
 }
 
+#done {
+  background: rgba(0, 0, 0, .7);
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, .7);
+  box-sizing: border-box;
+  color: white;
+  display: none;
+  font-size: 38px;
+  height: calc(48px * 2);
+  left: calc(50% - 150px);
+  padding: 32px;
+  position: absolute;
+  text-align: center;
+  top: calc(50% - 48px);
+  width: 300px;
+}
+
 @-webkit-keyframes slideRight {
   0% {
     -webkit-transform: none;
@@ -238,6 +255,7 @@ CoffeeScript version to ES6 with some bug fixes included.</p>
   <button id="undo">Undo</button>
   <button id="reset">Reset</button>
 </div>
+<div id="done">Excellent!!</div>
 </div>
 
 <script src="jelly.js"></script>
