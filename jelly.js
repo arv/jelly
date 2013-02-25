@@ -280,6 +280,31 @@ var Stage = function() {
           }
         }
       }
+      this.checkForCompletion();
+    },
+    get done() {
+      return this._done;
+    },
+    checkForCompletion: function() {
+      var colors = {};
+      {
+        var $__5 = traceur.runtime.getIterator(this.jellies);
+        try {
+          while (true) {
+            var jelly = $__5.next();
+            {
+              colors[jelly.color] = true;
+            }
+          }
+        } catch (e) {
+          if (!traceur.runtime.isStopIteration(e)) throw e;
+        }
+      }
+      var done = Object.keys(colors).length === this.jellies.length;
+      if (done != this._done) {
+        this._done = done;
+        if (this.onDoneChange) this.onDoneChange();
+      }
     },
     doOneMerge: function() {
       {
@@ -522,7 +547,6 @@ var Jelly = function() {
 function loadLevel() {
   var level = + location.hash.slice(1) || 0;
   if (!stage) stage = new Stage(document.getElementById('map'), levels[level]); else stage.loadMap(levels[level]);
-  var levelPicker = document.getElementById('level');
   levelPicker.value = level;
 }
 var levelPicker = document.getElementById('level');
@@ -535,6 +559,9 @@ for (var i = 0; i < levels.length; i++) {
 }
 var stage;
 loadLevel();
+stage.onDoneChange = (function() {
+  document.getElementById('done').style.display = stage.done ? 'block': '';
+});
 document.getElementById('undo').onclick = (function() {
   return stage.undo();
 });
