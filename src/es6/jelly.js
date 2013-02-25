@@ -1,15 +1,6 @@
-var levels = [
-  // [ 'xxxxxxxxxxxxxx',
-  //   'x            x',
-  //   'x            x',
-  //   'x            x',
-  //   'x            x',
-  //   'x            x',
-  //   'x            x',
-  //   'x R    r     x',
-  //   'x xxxxxxxxxxxx',
-  //   'xxxxxxxxxxxxxx', ],
+'use strict';
 
+var levels = [
   [ 'xxxxxxxxxxxxxx',
     'x            x',
     'x            x',
@@ -114,26 +105,36 @@ function isFixed(color) {
   return 'RGB'.indexOf(color) >= 0;
 }
 
+function getColor(symbol) {
+  switch (symbol) {
+    case 'r':
+    case 'R':
+      return 'red';
+    case 'g':
+    case 'G':
+      return 'green';
+    case 'b':
+    case 'B':
+      return 'blue';
+  }
+}
+
+
 class Stage {
   constructor(dom, map) {
     this.dom = dom;
-    this.jellies = [];
-    this.loadMap(map);
 
     // Capture and swallow all click events during animations.
     this.busy = false;
-    var maybeSwallowEvent = (e) => {
-      e.preventDefault();
-      if (this.busy)
-        e.stopPropagation();
-    };
 
-    // PointerEvents polyfill uses this to disable scroll etc.
-    this.dom.setAttribute('touch-action', 'none');
-    this.checkForMerges();
+    this.loadMap(map);
   }
 
   loadMap(map) {
+    this.undoStack = [];
+    this.jellies = [];
+    this.dom.textContent = '';
+
     var table = document.createElement('table');
     this.dom.appendChild(table);
     this.cells = map.map((line, y) => {
@@ -141,48 +142,31 @@ class Stage {
       var tr = document.createElement('tr');
       table.appendChild(tr);
       return row.map((char, x) => {
-        var color = null;
-        var cell = null;
-        var fixed = isFixed(row[x]);
-        switch (row[x]) {
-          case 'x':
-            cell = document.createElement('td');
-            cell.className = 'cell wall';
-            tr.appendChild(cell);
-            break;
-          case 'r':
-          case 'R':
-            color = 'red';
-            break;
-          case 'g':
-          case 'G':
-            color = 'green';
-            break;
-          case 'b':
-          case 'B':
-            color = 'blue';
-            break;
+        if (row[x] === 'x') {
+          var wall = document.createElement('td');
+          wall.className = 'cell wall';
+          tr.appendChild(wall);
+          return wall;
         }
 
-        if (!cell) {
-          var td = document.createElement('td');
-          td.className = 'transparent';
-          tr.appendChild(td);
-        }
+        var td = document.createElement('td');
+        td.className = 'transparent';
+        tr.appendChild(td);
 
-        if (color) {
-          var jelly = new Jelly(this, x, y, color, fixed);
-
+        if (row[x] !== ' ') {
+          var jelly = new Jelly(this, x, y, row[x]);
           this.dom.appendChild(jelly.dom);
           this.jellies.push(jelly);
-          cell = jelly;
+          return jelly;
         }
 
-        return cell;
+        return null;
       });
     });
     this.addBorders();
     this.addLocks();
+
+    this.checkForMerges();
   }
 
   addBorders() {
@@ -229,6 +213,8 @@ class Stage {
   trySlide(jelly, dir) {
     if (!this.canMove(jelly, dir))
       return;
+
+    this.saveState();
 
     this.busy = true;
     var jellies = this.getAdjacentObjects(jelly, dir).filter(isJelly);
@@ -355,6 +341,43 @@ class Stage {
     }
     return null;
   }
+
+  saveState() {
+    var rows = [];
+    for (var row of this.cells) {
+      var s = '';
+      for (var cell of row) {
+        if (isJelly(cell))
+          s += cell.symbol;
+        else if (cell)
+          s += 'x';
+        else
+          s += ' ';
+      }
+      rows.push(s);
+    }
+    this.undoStack.push(rows);
+  }
+
+  get canUndo() {
+    return this.undoStack.length > 0;
+  }
+
+  undo() {
+    var state = this.undoStack.pop();
+    if (!state)
+      return;
+    var undoStack = this.undoStack;
+    this.loadMap(state);
+    this.undoStack = undoStack;
+  }
+
+  reset() {
+    var state = this.undoStack[0];
+    if (!state)
+      return;
+    this.loadMap(state);
+  }
 }
 
 class JellyCell {
@@ -368,12 +391,13 @@ class JellyCell {
 }
 
 class Jelly {
-  constructor(stage, x, y, color, fixed) {
+  constructor(stage, x, y, symbol) {
     this.stage = stage;
     this.x = x;
     this.y = y;
-    this.color = color;
-    this.isFixed = fixed;
+    this.symbol = symbol;
+    this.color = getColor(symbol);
+    this.isFixed = isFixed(symbol);
     this.dom = document.createElement('div');
     this.updatePosition(this.x, this.y);
     this.dom.className = 'cell jellybox';
@@ -492,12 +516,13 @@ class Jelly {
   }
 }
 
-function resetLevel() {
+function loadLevel() {
   var level = +location.hash.slice(1) || 0;
-  if (stage && stage.dom)
-    stage.dom.textContent = '';
-  stage = new Stage(document.getElementById('map'), levels[level]);
-  var levelPicker = document.getElementById('level');
+  if (!stage)
+    stage = new Stage(document.getElementById('map'), levels[level]);
+  else
+    stage.loadMap(levels[level]);
+
   levelPicker.value = level;
 }
 
@@ -510,8 +535,11 @@ for (var i = 0; i < levels.length; i++) {
   levelPicker.appendChild(option);
 }
 
-resetLevel();
+var stage;
 
-document.getElementById('reset').addEventListener('click', resetLevel);
+loadLevel();
 
-window.addEventListener('hashchange', resetLevel);
+document.getElementById('undo').onclick = () => stage.undo();
+document.getElementById('reset').onclick = () => stage.reset();
+
+window.addEventListener('hashchange', loadLevel);

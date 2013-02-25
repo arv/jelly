@@ -43,11 +43,16 @@ select#level {
   font: inherit;
 }
 
-#reset {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
+
+#reset,
+#undo {
   font: inherit;
+}
+
+.buttons {
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
 }
 
 #stage table {
@@ -213,30 +218,34 @@ select#level {
 <h1>jelly</h1>
 
 <p>This is a HTML5 clone
-of <a href='http://qrostar.skr.jp/index.cgi?page=jelly&lang=en'>Jelly
+of <a href="http://qrostar.skr.jp/index.cgi?page=jelly&lang=en">Jelly
 no Puzzle</a>, an excellent puzzle game that was released for Windows
 only.  The game design and levels are taken directly from that. If you
 can run the Windows version I highly recommend it as it has a lot of
 great extra details.</p>
 
-<p>This is a port of <a href='https://github.com/martine/jelly'>martine's</a>
+<p>This is a port of <a href="https://github.com/martine/jelly">martine's</a>
 CoffeeScript version to ES6 with some bug fixes included.</p>
 
 <script src="third_party/PointerEvents/src/pointerevents.js"></script>
 <script src="traceur/src/runtime/runtime.js"></script>
 
-<div id='stage'>
-<div id='map'></div>
-<select id='level'></select>
-<button id='reset'>Reset</button>
+<!-- PointerEvents polyfill uses this to disable scroll etc. -->
+<div id="stage" touch-action="none">
+<div id="map"></div>
+<select id="level"></select>
+<div class="buttons">
+  <button id="undo">Undo</button>
+  <button id="reset">Reset</button>
+</div>
 </div>
 
-<script src='jelly.js'></script>
+<script src="jelly.js"></script>
 
 <p>How to play: drag the jellies left or right.  When jellies of the same color
 touch they merge. Your objective is to unify all jellies of the same color.</p>
 
-<p><a href='https://github.com/arv/jelly'>Here's the source</a>.
+<p><a href="https://github.com/arv/jelly">Here's the source</a>.
 To be implemented:</p>
 
 <ol>
