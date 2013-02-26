@@ -4,6 +4,8 @@ var levels = [
   [ 'xxxxxxxxxxxxxx',
     'x            x',
     'x            x',
+    'x            x',
+    'x            x',
     'x      r     x',
     'x      xx    x',
     'x  g     r b x',
@@ -14,12 +16,16 @@ var levels = [
     'x            x',
     'x            x',
     'x            x',
+    'x            x',
+    'x            x',
     'x     g   g  x',
     'x   r r   r  x',
     'xxxxx x x xxxx',
     'xxxxxxxxxxxxxx', ],
 
   [ 'xxxxxxxxxxxxxx',
+    'x            x',
+    'x            x',
     'x            x',
     'x            x',
     'x   bg  x g  x',
@@ -82,7 +88,6 @@ var levels = [
     'xxxxxxxxxxxxxx',
     'xxxxxxxxxxxxxx', ],
   ]
-
 
 var CELL_SIZE = 48;
 
@@ -535,6 +540,8 @@ class Jelly {
   }
 }
 
+var stage = null;  // Safari bug. Needs assignment to shadow element with ID.
+
 function loadLevel() {
   var level = +location.hash.slice(1) || 0;
   if (!stage)
@@ -554,7 +561,6 @@ for (var i = 0; i < levels.length; i++) {
   levelPicker.appendChild(option);
 }
 
-var stage;
 
 loadLevel();
 
