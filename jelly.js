@@ -13,7 +13,7 @@ var $__getDescriptors = function(object) {
   Object.defineProperties(ctor, $__getDescriptors(staticObject));
   return ctor;
 };
-var levels = [['xxxxxxxxxxxxxx', 'x            x', 'x            x', 'x            x', 'x            x', 'x      r     x', 'x      xx    x', 'x  g     r b x', 'xxbxxxg xxxxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x            x', 'x            x', 'x            x', 'x            x', 'x     g   g  x', 'x   r r   r  x', 'xxxxx x x xxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x            x', 'x            x', 'x            x', 'x   bg  x g  x', 'xxx xxxrxxx  x', 'x      b     x', 'xxx xxxrxxxxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x       r    x', 'x       b    x', 'x       x    x', 'x b r        x', 'x b r      b x', 'xxx x      xxx', 'xxxxx xxxxxxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x            x', 'xrg  gg      x', 'xxx xxxx xx  x', 'xrg          x', 'xxxxx  xx   xx', 'xxxxxx xx  xxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'xxxxxxx      x', 'xxxxxxx g    x', 'x       xx   x', 'x r   b      x', 'x x xxx x g  x', 'x         x bx', 'x       r xxxx', 'x   xxxxxxxxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x          r x', 'x          x x', 'x     b   b  x', 'x     x  rr  x', 'x         x  x', 'x R  Bx x x  x', 'x x  xx x x  x', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'xxx  x  x   xx', 'xx   g  b   xx', 'xx   x  x   xx', 'xx   B  G   xx', 'xxg        bxx', 'xxxg      bxxx', 'xxxx      xxxx', 'xxxxxxxxxxxxxx', 'xxxxxxxxxxxxxx']];
+var levels = [['xxxxxxxxxxxxxx', 'x            x', 'x            x', 'x            x', 'x            x', 'x      r     x', 'x      xx    x', 'x  g     r b x', 'xxbxxxg xxxxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x            x', 'x            x', 'x            x', 'x            x', 'x     g   g  x', 'x   r r   r  x', 'xxxxx x x xxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x            x', 'x            x', 'x            x', 'x   bg  x g  x', 'xxx xxxrxxx  x', 'x      b     x', 'xxx xxxrxxxxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x       r    x', 'x       b    x', 'x       x    x', 'x b r        x', 'x b r      b x', 'xxx x      xxx', 'xxxxx xxxxxxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x            x', 'xrg  gg      x', 'xxx xxxx xx  x', 'xrg          x', 'xxxxx  xx   xx', 'xxxxxx xx  xxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'xxxxxxx      x', 'xxxxxxx g    x', 'x       xx   x', 'x r   b      x', 'x x xxx x g  x', 'x         x bx', 'x       r xxxx', 'x   xxxxxxxxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x          r x', 'x          x x', 'x     b   b  x', 'x     x  rr  x', 'x         x  x', 'x R  Bx x x  x', 'x x  xx x x  x', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'xxx  x  x   xx', 'xx   g  b   xx', 'xx   x  x   xx', 'xx   B  G   xx', 'xxg        bxx', 'xxxg      bxxx', 'xxxx      xxxx', 'xxxxxxxxxxxxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x            x', 'x            x', 'x            x', 'x            x', 'x          rbx', 'x    x     xxx', 'xb        11xx', 'xx  Rx  x xxxx', 'xxxxxxxxxxxxxx'], ['xxxxxxxxxxxxxx', 'x   gr       x', 'x   11 2     x', 'x    x x     x', 'x            x', 'x  x  x      x', 'x        x  rx', 'xx   x     gxx', 'x          xxx', 'xxxxxxxxxxxxxx']];
 var CELL_SIZE = 48;
 var oldWebKit = !('animation'in document.documentElement.style);
 var animation = oldWebKit ? 'webkitAnimation': 'animation';
@@ -27,11 +27,11 @@ function moveToCell(dom, x, y) {
 function isJelly(object) {
   return object instanceof Jelly;
 }
-function isFixed(color) {
-  return 'RGB'.indexOf(color) >= 0;
+function isFixed(kind) {
+  return 'RGB'.indexOf(kind) >= 0;
 }
-function getColor(symbol) {
-  switch (symbol) {
+function getColor(kind) {
+  switch (kind) {
     case 'r':
     case 'R':
       return 'red';
@@ -41,6 +41,9 @@ function getColor(symbol) {
     case 'b':
     case 'B':
       return 'blue';
+    case '1':
+    case '2':
+      return 'black';
   }
 }
 var Stage = function() {
@@ -286,21 +289,21 @@ var Stage = function() {
       return this._done;
     },
     checkForCompletion: function() {
-      var colors = {};
+      var kinds = {};
       {
         var $__5 = traceur.runtime.getIterator(this.jellies);
         try {
           while (true) {
             var jelly = $__5.next();
             {
-              colors[jelly.color] = true;
+              kinds[jelly.kind] = true;
             }
           }
         } catch (e) {
           if (!traceur.runtime.isStopIteration(e)) throw e;
         }
       }
-      var done = Object.keys(colors).length === this.jellies.length;
+      var done = Object.keys(kinds).length === this.jellies.length;
       if (done != this._done) {
         this._done = done;
         if (this.onDoneChange) this.onDoneChange();
@@ -328,7 +331,7 @@ var Stage = function() {
                               var other = this.cells[y + dy][x + dx];
                               if (!other || !isJelly(other)) continue;
                               if (other == jelly) continue;
-                              if (jelly.color != other.color) continue;
+                              if (jelly.kind != other.kind) continue;
                               jelly.merge(other);
                               this.jellies = this.jellies.filter((function(j) {
                                 return j != other;
@@ -369,7 +372,7 @@ var Stage = function() {
                   while (true) {
                     var cell = $__6.next();
                     {
-                      if (isJelly(cell)) s += cell.symbol; else if (cell) s += 'x'; else s += ' ';
+                      if (isJelly(cell)) s += cell.kind; else if (cell) s += 'x'; else s += ' ';
                     }
                   }
                 } catch (e) {
@@ -415,17 +418,17 @@ var JellyCell = function() {
 }();
 var Jelly = function() {
   var $Jelly = ($__createClassNoExtends)({
-    constructor: function(stage, x, y, symbol) {
+    constructor: function(stage, x, y, kind) {
       this.stage = stage;
       this.x = x;
       this.y = y;
-      this.symbol = symbol;
-      this.color = getColor(symbol);
-      this.isFixed = isFixed(symbol);
+      var color = getColor(kind);
+      this.isFixed = isFixed(kind);
+      this.kind = kind.toLowerCase();
       this.dom = document.createElement('div');
       this.updatePosition(this.x, this.y);
       this.dom.className = 'cell jellybox';
-      var cell = new JellyCell(this, 0, 0, this.color);
+      var cell = new JellyCell(this, 0, 0, color);
       this.dom.appendChild(cell.dom);
       this.cells = [cell];
       this.dom.addEventListener('pointerdown', (function(e) {

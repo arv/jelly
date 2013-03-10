@@ -87,7 +87,30 @@ var levels = [
     'xxxx      xxxx',
     'xxxxxxxxxxxxxx',
     'xxxxxxxxxxxxxx', ],
-  ]
+
+  [ 'xxxxxxxxxxxxxx',
+    'x            x',
+    'x            x',
+    'x            x',
+    'x            x',
+    'x          rbx',
+    'x    x     xxx',
+    'xb        11xx',
+    'xx  Rx  x xxxx',
+    'xxxxxxxxxxxxxx', ],
+
+  [ 'xxxxxxxxxxxxxx',
+    'x   gr       x',
+    'x   11 2     x',
+    'x    x x     x',
+    'x            x',
+    'x  x  x      x',
+    'x        x  rx',
+    'xx   x     gxx',
+    'x          xxx',
+    'xxxxxxxxxxxxxx', ],
+
+];
 
 var CELL_SIZE = 48;
 
@@ -106,12 +129,12 @@ function isJelly(object) {
   return object instanceof Jelly;
 }
 
-function isFixed(color) {
-  return 'RGB'.indexOf(color) >= 0;
+function isFixed(kind) {
+  return 'RGB'.indexOf(kind) >= 0;
 }
 
-function getColor(symbol) {
-  switch (symbol) {
+function getColor(kind) {
+  switch (kind) {
     case 'r':
     case 'R':
       return 'red';
@@ -121,6 +144,9 @@ function getColor(symbol) {
     case 'b':
     case 'B':
       return 'blue';
+    case '1':
+    case '2':
+      return 'black';
   }
 }
 
@@ -331,12 +357,12 @@ class Stage {
   }
 
   checkForCompletion() {
-    var colors = {};
+    var kinds = {};
     for (var jelly of this.jellies) {
-      colors[jelly.color] = true;
+      kinds[jelly.kind] = true;
     }
 
-    var done = Object.keys(colors).length === this.jellies.length;
+    var done = Object.keys(kinds).length === this.jellies.length;
     if (done != this._done) {
       this._done = done;
       if (this.onDoneChange)
@@ -355,7 +381,7 @@ class Stage {
             continue;
           if (other == jelly)
             continue;
-          if (jelly.color != other.color)
+          if (jelly.kind != other.kind)
             continue;
           jelly.merge(other);
           this.jellies = this.jellies.filter((j) => j != other);
@@ -372,7 +398,7 @@ class Stage {
       var s = '';
       for (var cell of row) {
         if (isJelly(cell))
-          s += cell.symbol;
+          s += cell.kind;
         else if (cell)
           s += 'x';
         else
@@ -415,18 +441,18 @@ class JellyCell {
 }
 
 class Jelly {
-  constructor(stage, x, y, symbol) {
+  constructor(stage, x, y, kind) {
     this.stage = stage;
     this.x = x;
     this.y = y;
-    this.symbol = symbol;
-    this.color = getColor(symbol);
-    this.isFixed = isFixed(symbol);
+    var color = getColor(kind);
+    this.isFixed = isFixed(kind);
+    this.kind = kind.toLowerCase();
     this.dom = document.createElement('div');
     this.updatePosition(this.x, this.y);
     this.dom.className = 'cell jellybox';
 
-    var cell = new JellyCell(this, 0, 0, this.color);
+    var cell = new JellyCell(this, 0, 0, color);
     this.dom.appendChild(cell.dom);
     this.cells = [cell];
 
