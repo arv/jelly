@@ -1,0 +1,27 @@
+{
+  "name": "jelly",
+  "version": "0.0.0",
+  "description": "Port of the Jelly game",
+  "main": "jelly.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arv/jelly.git"
+  },
+  "keywords": [
+    "jelly",
+    "game"
+  ],
+  "author": "",
+  "license": "Apache License 2.0",
+  "bugs": {
+    "url": "https://github.com/arv/jelly/issues"
+  },
+  "homepage": "https://github.com/arv/jelly",
+  "dependencies": {
+    "PEP": "git://github.com/jquery/PEP#0.2.4",
+    "traceur": "0.0.88"
+  }
+}
