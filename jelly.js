@@ -74,8 +74,8 @@ var Stage = (function() {
       this.checkForMerges();
     },
     addBorders: function() {
-      var $__27,
-          $__28;
+      var $__24,
+          $__25;
       for (var y = 0; y < this.cells.length; y++) {
         for (var x = 0; x < this.cells[0].length; x++) {
           var cell = this.cells[y][x];
@@ -83,16 +83,16 @@ var Stage = (function() {
             continue;
           var border = 'solid 1px #777';
           var edges = [['borderBottom', 0, 1], ['borderTop', 0, -1], ['borderLeft', -1, 0], ['borderRight', 1, 0]];
-          var $__8 = true;
-          var $__9 = false;
-          var $__10 = undefined;
+          var $__5 = true;
+          var $__6 = false;
+          var $__7 = undefined;
           try {
-            for (var $__6 = void 0,
-                $__5 = (edges)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-              var $__26 = $__6.value,
-                  attr = ($__27 = $__26[$traceurRuntime.toProperty(Symbol.iterator)](), ($__28 = $__27.next()).done ? void 0 : $__28.value),
-                  dx = ($__28 = $__27.next()).done ? void 0 : $__28.value,
-                  dy = ($__28 = $__27.next()).done ? void 0 : $__28.value;
+            for (var $__3 = void 0,
+                $__2 = (edges)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+              var $__23 = $__3.value,
+                  attr = ($__24 = $__23[$traceurRuntime.toProperty(Symbol.iterator)](), ($__25 = $__24.next()).done ? void 0 : $__25.value),
+                  dx = ($__25 = $__24.next()).done ? void 0 : $__25.value,
+                  dy = ($__25 = $__24.next()).done ? void 0 : $__25.value;
               {
                 if (y + dy < 0 || y + dy >= this.cells.length)
                   continue;
@@ -103,17 +103,17 @@ var Stage = (function() {
                   cell.style[attr] = border;
               }
             }
-          } catch ($__11) {
-            $__9 = true;
-            $__10 = $__11;
+          } catch ($__8) {
+            $__6 = true;
+            $__7 = $__8;
           } finally {
             try {
-              if (!$__8 && $__5.return != null) {
-                $__5.return();
+              if (!$__5 && $__2.return != null) {
+                $__2.return();
               }
             } finally {
-              if ($__9) {
-                throw $__10;
+              if ($__6) {
+                throw $__7;
               }
             }
           }
@@ -121,29 +121,29 @@ var Stage = (function() {
       }
     },
     addLocks: function() {
-      var $__8 = true;
-      var $__9 = false;
-      var $__10 = undefined;
+      var $__5 = true;
+      var $__6 = false;
+      var $__7 = undefined;
       try {
-        for (var $__6 = void 0,
-            $__5 = (this.jellies)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-          var jelly = $__6.value;
+        for (var $__3 = void 0,
+            $__2 = (this.jellies)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+          var jelly = $__3.value;
           {
             if (jelly.isFixed)
               jelly.addLock();
           }
         }
-      } catch ($__11) {
-        $__9 = true;
-        $__10 = $__11;
+      } catch ($__8) {
+        $__6 = true;
+        $__7 = $__8;
       } finally {
         try {
-          if (!$__8 && $__5.return != null) {
-            $__5.return();
+          if (!$__5 && $__2.return != null) {
+            $__2.return();
           }
         } finally {
-          if ($__9) {
-            throw $__10;
+          if ($__6) {
+            throw $__7;
           }
         }
       }
@@ -174,64 +174,64 @@ var Stage = (function() {
       }));
     },
     move: function(jelly, dx, dy) {
-      var $__27,
-          $__28,
-          $__30,
-          $__31;
+      var $__24,
+          $__25,
+          $__27,
+          $__28;
       var targetX = jelly.x + dx;
       var targetY = jelly.y + dy;
-      var $__8 = true;
-      var $__9 = false;
-      var $__10 = undefined;
+      var $__5 = true;
+      var $__6 = false;
+      var $__7 = undefined;
       try {
-        for (var $__6 = void 0,
-            $__5 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-          var $__26 = $__6.value,
-              x = ($__27 = $__26[$traceurRuntime.toProperty(Symbol.iterator)](), ($__28 = $__27.next()).done ? void 0 : $__28.value),
-              y = ($__28 = $__27.next()).done ? void 0 : $__28.value;
+        for (var $__3 = void 0,
+            $__2 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+          var $__23 = $__3.value,
+              x = ($__24 = $__23[$traceurRuntime.toProperty(Symbol.iterator)](), ($__25 = $__24.next()).done ? void 0 : $__25.value),
+              y = ($__25 = $__24.next()).done ? void 0 : $__25.value;
           {
             this.cells[y][x] = null;
           }
         }
-      } catch ($__11) {
-        $__9 = true;
-        $__10 = $__11;
+      } catch ($__8) {
+        $__6 = true;
+        $__7 = $__8;
       } finally {
         try {
-          if (!$__8 && $__5.return != null) {
-            $__5.return();
+          if (!$__5 && $__2.return != null) {
+            $__2.return();
           }
         } finally {
-          if ($__9) {
-            throw $__10;
+          if ($__6) {
+            throw $__7;
           }
         }
       }
       jelly.updatePosition(targetX, targetY);
-      var $__15 = true;
-      var $__16 = false;
-      var $__17 = undefined;
+      var $__12 = true;
+      var $__13 = false;
+      var $__14 = undefined;
       try {
-        for (var $__13 = void 0,
-            $__12 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__15 = ($__13 = $__12.next()).done); $__15 = true) {
-          var $__29 = $__13.value,
-              x = ($__30 = $__29[$traceurRuntime.toProperty(Symbol.iterator)](), ($__31 = $__30.next()).done ? void 0 : $__31.value),
-              y = ($__31 = $__30.next()).done ? void 0 : $__31.value;
+        for (var $__10 = void 0,
+            $__9 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__12 = ($__10 = $__9.next()).done); $__12 = true) {
+          var $__26 = $__10.value,
+              x = ($__27 = $__26[$traceurRuntime.toProperty(Symbol.iterator)](), ($__28 = $__27.next()).done ? void 0 : $__28.value),
+              y = ($__28 = $__27.next()).done ? void 0 : $__28.value;
           {
             this.cells[y][x] = jelly;
           }
         }
-      } catch ($__18) {
-        $__16 = true;
-        $__17 = $__18;
+      } catch ($__15) {
+        $__13 = true;
+        $__14 = $__15;
       } finally {
         try {
-          if (!$__15 && $__12.return != null) {
-            $__12.return();
+          if (!$__12 && $__9.return != null) {
+            $__9.return();
           }
         } finally {
-          if ($__16) {
-            throw $__17;
+          if ($__13) {
+            throw $__14;
           }
         }
       }
@@ -240,34 +240,34 @@ var Stage = (function() {
       return this.cells[y][x] != null && !isJelly(this.cells[y][x]);
     },
     checkFilled: function(jelly, dx, dy) {
-      var $__29,
-          $__27;
-      var $__8 = true;
-      var $__9 = false;
-      var $__10 = undefined;
+      var $__26,
+          $__24;
+      var $__5 = true;
+      var $__6 = false;
+      var $__7 = undefined;
       try {
-        for (var $__6 = void 0,
-            $__5 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-          var $__26 = $__6.value,
-              x = ($__29 = $__26[$traceurRuntime.toProperty(Symbol.iterator)](), ($__27 = $__29.next()).done ? void 0 : $__27.value),
-              y = ($__27 = $__29.next()).done ? void 0 : $__27.value;
+        for (var $__3 = void 0,
+            $__2 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+          var $__23 = $__3.value,
+              x = ($__26 = $__23[$traceurRuntime.toProperty(Symbol.iterator)](), ($__24 = $__26.next()).done ? void 0 : $__24.value),
+              y = ($__24 = $__26.next()).done ? void 0 : $__24.value;
           {
             var next = this.cells[y + dy][x + dx];
             if (next && next != jelly)
               return next;
           }
         }
-      } catch ($__11) {
-        $__9 = true;
-        $__10 = $__11;
+      } catch ($__8) {
+        $__6 = true;
+        $__7 = $__8;
       } finally {
         try {
-          if (!$__8 && $__5.return != null) {
-            $__5.return();
+          if (!$__5 && $__2.return != null) {
+            $__2.return();
           }
         } finally {
-          if ($__9) {
-            throw $__10;
+          if ($__6) {
+            throw $__7;
           }
         }
       }
@@ -276,29 +276,29 @@ var Stage = (function() {
     canMove: function(jelly, dir) {
       if (jelly.isFixed)
         return false;
-      var $__8 = true;
-      var $__9 = false;
-      var $__10 = undefined;
+      var $__5 = true;
+      var $__6 = false;
+      var $__7 = undefined;
       try {
-        for (var $__6 = void 0,
-            $__5 = (this.getAdjacentObjects(jelly, dir))[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-          var object = $__6.value;
+        for (var $__3 = void 0,
+            $__2 = (this.getAdjacentObjects(jelly, dir))[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+          var object = $__3.value;
           {
             if (!isJelly(object) || object.isFixed)
               return false;
           }
         }
-      } catch ($__11) {
-        $__9 = true;
-        $__10 = $__11;
+      } catch ($__8) {
+        $__6 = true;
+        $__7 = $__8;
       } finally {
         try {
-          if (!$__8 && $__5.return != null) {
-            $__5.return();
+          if (!$__5 && $__2.return != null) {
+            $__2.return();
           }
         } finally {
-          if ($__9) {
-            throw $__10;
+          if ($__6) {
+            throw $__7;
           }
         }
       }
@@ -308,18 +308,18 @@ var Stage = (function() {
       var $__0 = this;
       var found = [];
       var inner = (function(jelly) {
-        var $__29,
-            $__27;
+        var $__26,
+            $__24;
         found.push(jelly);
-        var $__8 = true;
-        var $__9 = false;
-        var $__10 = undefined;
+        var $__5 = true;
+        var $__6 = false;
+        var $__7 = undefined;
         try {
-          for (var $__6 = void 0,
-              $__5 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-            var $__26 = $__6.value,
-                x = ($__29 = $__26[$traceurRuntime.toProperty(Symbol.iterator)](), ($__27 = $__29.next()).done ? void 0 : $__27.value),
-                y = ($__27 = $__29.next()).done ? void 0 : $__27.value;
+          for (var $__3 = void 0,
+              $__2 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+            var $__23 = $__3.value,
+                x = ($__26 = $__23[$traceurRuntime.toProperty(Symbol.iterator)](), ($__24 = $__26.next()).done ? void 0 : $__24.value),
+                y = ($__24 = $__26.next()).done ? void 0 : $__24.value;
             {
               var next = $__0.cells[y][x + dir];
               if (next && next != jelly && found.indexOf(next) == -1) {
@@ -330,17 +330,17 @@ var Stage = (function() {
               }
             }
           }
-        } catch ($__11) {
-          $__9 = true;
-          $__10 = $__11;
+        } catch ($__8) {
+          $__6 = true;
+          $__7 = $__8;
         } finally {
           try {
-            if (!$__8 && $__5.return != null) {
-              $__5.return();
+            if (!$__5 && $__2.return != null) {
+              $__2.return();
             }
           } finally {
-            if ($__9) {
-              throw $__10;
+            if ($__6) {
+              throw $__7;
             }
           }
         }
@@ -353,13 +353,13 @@ var Stage = (function() {
       var didOneMove = true;
       while (didOneMove) {
         didOneMove = false;
-        var $__8 = true;
-        var $__9 = false;
-        var $__10 = undefined;
+        var $__5 = true;
+        var $__6 = false;
+        var $__7 = undefined;
         try {
-          for (var $__6 = void 0,
-              $__5 = (this.jellies)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-            var jelly = $__6.value;
+          for (var $__3 = void 0,
+              $__2 = (this.jellies)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+            var jelly = $__3.value;
             {
               if (!jelly.isFixed && !this.checkFilled(jelly, 0, 1)) {
                 this.move(jelly, 0, 1);
@@ -368,17 +368,17 @@ var Stage = (function() {
               }
             }
           }
-        } catch ($__11) {
-          $__9 = true;
-          $__10 = $__11;
+        } catch ($__8) {
+          $__6 = true;
+          $__7 = $__8;
         } finally {
           try {
-            if (!$__8 && $__5.return != null) {
-              $__5.return();
+            if (!$__5 && $__2.return != null) {
+              $__2.return();
             }
           } finally {
-            if ($__9) {
-              throw $__10;
+            if ($__6) {
+              throw $__7;
             }
           }
         }
@@ -389,34 +389,34 @@ var Stage = (function() {
         cb();
     },
     checkForMerges: function() {
-      var $__29,
-          $__27;
+      var $__26,
+          $__24;
       var jelly;
       while (jelly = this.doOneMerge()) {
-        var $__8 = true;
-        var $__9 = false;
-        var $__10 = undefined;
+        var $__5 = true;
+        var $__6 = false;
+        var $__7 = undefined;
         try {
-          for (var $__6 = void 0,
-              $__5 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-            var $__26 = $__6.value,
-                x = ($__29 = $__26[$traceurRuntime.toProperty(Symbol.iterator)](), ($__27 = $__29.next()).done ? void 0 : $__27.value),
-                y = ($__27 = $__29.next()).done ? void 0 : $__27.value;
+          for (var $__3 = void 0,
+              $__2 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+            var $__23 = $__3.value,
+                x = ($__26 = $__23[$traceurRuntime.toProperty(Symbol.iterator)](), ($__24 = $__26.next()).done ? void 0 : $__24.value),
+                y = ($__24 = $__26.next()).done ? void 0 : $__24.value;
             {
               this.cells[y][x] = jelly;
             }
           }
-        } catch ($__11) {
-          $__9 = true;
-          $__10 = $__11;
+        } catch ($__8) {
+          $__6 = true;
+          $__7 = $__8;
         } finally {
           try {
-            if (!$__8 && $__5.return != null) {
-              $__5.return();
+            if (!$__5 && $__2.return != null) {
+              $__2.return();
             }
           } finally {
-            if ($__9) {
-              throw $__10;
+            if ($__6) {
+              throw $__7;
             }
           }
         }
@@ -428,28 +428,28 @@ var Stage = (function() {
     },
     checkForCompletion: function() {
       var kinds = {};
-      var $__8 = true;
-      var $__9 = false;
-      var $__10 = undefined;
+      var $__5 = true;
+      var $__6 = false;
+      var $__7 = undefined;
       try {
-        for (var $__6 = void 0,
-            $__5 = (this.jellies)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-          var jelly = $__6.value;
+        for (var $__3 = void 0,
+            $__2 = (this.jellies)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+          var jelly = $__3.value;
           {
             kinds[jelly.kind] = true;
           }
         }
-      } catch ($__11) {
-        $__9 = true;
-        $__10 = $__11;
+      } catch ($__8) {
+        $__6 = true;
+        $__7 = $__8;
       } finally {
         try {
-          if (!$__8 && $__5.return != null) {
-            $__5.return();
+          if (!$__5 && $__2.return != null) {
+            $__2.return();
           }
         } finally {
-          if ($__9) {
-            throw $__10;
+          if ($__6) {
+            throw $__7;
           }
         }
       }
@@ -461,37 +461,37 @@ var Stage = (function() {
       }
     },
     doOneMerge: function() {
-      var $__29,
+      var $__26,
+          $__24,
           $__27,
-          $__30,
-          $__31;
-      var $__22 = true;
-      var $__23 = false;
-      var $__24 = undefined;
+          $__28;
+      var $__19 = true;
+      var $__20 = false;
+      var $__21 = undefined;
       try {
-        for (var $__20 = void 0,
-            $__19 = (this.jellies)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__22 = ($__20 = $__19.next()).done); $__22 = true) {
-          var jelly = $__20.value;
+        for (var $__17 = void 0,
+            $__16 = (this.jellies)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__19 = ($__17 = $__16.next()).done); $__19 = true) {
+          var jelly = $__17.value;
           {
-            var $__15 = true;
-            var $__16 = false;
-            var $__17 = undefined;
+            var $__12 = true;
+            var $__13 = false;
+            var $__14 = undefined;
             try {
-              for (var $__13 = void 0,
-                  $__12 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__15 = ($__13 = $__12.next()).done); $__15 = true) {
-                var $__26 = $__13.value,
-                    x = ($__29 = $__26[$traceurRuntime.toProperty(Symbol.iterator)](), ($__27 = $__29.next()).done ? void 0 : $__27.value),
-                    y = ($__27 = $__29.next()).done ? void 0 : $__27.value;
+              for (var $__10 = void 0,
+                  $__9 = (jelly.cellCoords())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__12 = ($__10 = $__9.next()).done); $__12 = true) {
+                var $__23 = $__10.value,
+                    x = ($__26 = $__23[$traceurRuntime.toProperty(Symbol.iterator)](), ($__24 = $__26.next()).done ? void 0 : $__24.value),
+                    y = ($__24 = $__26.next()).done ? void 0 : $__24.value;
                 {
-                  var $__8 = true;
-                  var $__9 = false;
-                  var $__10 = undefined;
+                  var $__5 = true;
+                  var $__6 = false;
+                  var $__7 = undefined;
                   try {
-                    for (var $__6 = void 0,
-                        $__5 = ([[1, 0], [0, 1]])[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-                      var $__28 = $__6.value,
-                          dx = ($__30 = $__28[$traceurRuntime.toProperty(Symbol.iterator)](), ($__31 = $__30.next()).done ? void 0 : $__31.value),
-                          dy = ($__31 = $__30.next()).done ? void 0 : $__31.value;
+                    for (var $__3 = void 0,
+                        $__2 = ([[1, 0], [0, 1]])[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+                      var $__25 = $__3.value,
+                          dx = ($__27 = $__25[$traceurRuntime.toProperty(Symbol.iterator)](), ($__28 = $__27.next()).done ? void 0 : $__28.value),
+                          dy = ($__28 = $__27.next()).done ? void 0 : $__28.value;
                       {
                         var other = this.cells[y + dy][x + dx];
                         if (!other || !isJelly(other))
@@ -507,49 +507,49 @@ var Stage = (function() {
                         return jelly;
                       }
                     }
-                  } catch ($__11) {
-                    $__9 = true;
-                    $__10 = $__11;
+                  } catch ($__8) {
+                    $__6 = true;
+                    $__7 = $__8;
                   } finally {
                     try {
-                      if (!$__8 && $__5.return != null) {
-                        $__5.return();
+                      if (!$__5 && $__2.return != null) {
+                        $__2.return();
                       }
                     } finally {
-                      if ($__9) {
-                        throw $__10;
+                      if ($__6) {
+                        throw $__7;
                       }
                     }
                   }
                 }
               }
-            } catch ($__18) {
-              $__16 = true;
-              $__17 = $__18;
+            } catch ($__15) {
+              $__13 = true;
+              $__14 = $__15;
             } finally {
               try {
-                if (!$__15 && $__12.return != null) {
-                  $__12.return();
+                if (!$__12 && $__9.return != null) {
+                  $__9.return();
                 }
               } finally {
-                if ($__16) {
-                  throw $__17;
+                if ($__13) {
+                  throw $__14;
                 }
               }
             }
           }
         }
-      } catch ($__25) {
-        $__23 = true;
-        $__24 = $__25;
+      } catch ($__22) {
+        $__20 = true;
+        $__21 = $__22;
       } finally {
         try {
-          if (!$__22 && $__19.return != null) {
-            $__19.return();
+          if (!$__19 && $__16.return != null) {
+            $__16.return();
           }
         } finally {
-          if ($__23) {
-            throw $__24;
+          if ($__20) {
+            throw $__21;
           }
         }
       }
@@ -557,22 +557,22 @@ var Stage = (function() {
     },
     saveState: function() {
       var rows = [];
-      var $__15 = true;
-      var $__16 = false;
-      var $__17 = undefined;
+      var $__12 = true;
+      var $__13 = false;
+      var $__14 = undefined;
       try {
-        for (var $__13 = void 0,
-            $__12 = (this.cells)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__15 = ($__13 = $__12.next()).done); $__15 = true) {
-          var row = $__13.value;
+        for (var $__10 = void 0,
+            $__9 = (this.cells)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__12 = ($__10 = $__9.next()).done); $__12 = true) {
+          var row = $__10.value;
           {
             var s = '';
-            var $__8 = true;
-            var $__9 = false;
-            var $__10 = undefined;
+            var $__5 = true;
+            var $__6 = false;
+            var $__7 = undefined;
             try {
-              for (var $__6 = void 0,
-                  $__5 = (row)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-                var cell = $__6.value;
+              for (var $__3 = void 0,
+                  $__2 = (row)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+                var cell = $__3.value;
                 {
                   if (isJelly(cell))
                     s += cell.kind;
@@ -582,34 +582,34 @@ var Stage = (function() {
                     s += ' ';
                 }
               }
-            } catch ($__11) {
-              $__9 = true;
-              $__10 = $__11;
+            } catch ($__8) {
+              $__6 = true;
+              $__7 = $__8;
             } finally {
               try {
-                if (!$__8 && $__5.return != null) {
-                  $__5.return();
+                if (!$__5 && $__2.return != null) {
+                  $__2.return();
                 }
               } finally {
-                if ($__9) {
-                  throw $__10;
+                if ($__6) {
+                  throw $__7;
                 }
               }
             }
             rows.push(s);
           }
         }
-      } catch ($__18) {
-        $__16 = true;
-        $__17 = $__18;
+      } catch ($__15) {
+        $__13 = true;
+        $__14 = $__15;
       } finally {
         try {
-          if (!$__15 && $__12.return != null) {
-            $__12.return();
+          if (!$__12 && $__9.return != null) {
+            $__9.return();
           }
         } finally {
-          if ($__16) {
-            throw $__17;
+          if ($__13) {
+            throw $__14;
           }
         }
       }
@@ -687,35 +687,10 @@ var Jelly = (function() {
   }
   return ($traceurRuntime.createClass)(Jelly, {
     cellCoords: function() {
-      var $__4 = this;
-      return (function() {
-        var $__2 = 0,
-            $__3 = [];
-        var $__8 = true;
-        var $__9 = false;
-        var $__10 = undefined;
-        try {
-          for (var $__6 = void 0,
-              $__5 = ($__4.cells)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-            var cell = $__6.value;
-            $__3[$__2++] = [$__4.x + cell.x, $__4.y + cell.y];
-          }
-        } catch ($__11) {
-          $__9 = true;
-          $__10 = $__11;
-        } finally {
-          try {
-            if (!$__8 && $__5.return != null) {
-              $__5.return();
-            }
-          } finally {
-            if ($__9) {
-              throw $__10;
-            }
-          }
-        }
-        return $__3;
-      }());
+      var $__0 = this;
+      return this.cells.map((function(cell) {
+        return [$__0.x + cell.x, $__0.y + cell.y];
+      }));
     },
     slide: function(dir, cb) {
       var $__0 = this;
@@ -739,13 +714,13 @@ var Jelly = (function() {
     merge: function(other) {
       var dx = other.x - this.x;
       var dy = other.y - this.y;
-      var $__8 = true;
-      var $__9 = false;
-      var $__10 = undefined;
+      var $__5 = true;
+      var $__6 = false;
+      var $__7 = undefined;
       try {
-        for (var $__6 = void 0,
-            $__5 = (other.cells)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__8 = ($__6 = $__5.next()).done); $__8 = true) {
-          var cell = $__6.value;
+        for (var $__3 = void 0,
+            $__2 = (other.cells)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__5 = ($__3 = $__2.next()).done); $__5 = true) {
+          var cell = $__3.value;
           {
             this.cells.push(cell);
             cell.x += dx;
@@ -754,37 +729,37 @@ var Jelly = (function() {
             this.dom.appendChild(cell.dom);
           }
         }
-      } catch ($__11) {
-        $__9 = true;
-        $__10 = $__11;
+      } catch ($__8) {
+        $__6 = true;
+        $__7 = $__8;
       } finally {
         try {
-          if (!$__8 && $__5.return != null) {
-            $__5.return();
+          if (!$__5 && $__2.return != null) {
+            $__2.return();
           }
         } finally {
-          if ($__9) {
-            throw $__10;
+          if ($__6) {
+            throw $__7;
           }
         }
       }
       other.cells = null;
       other.dom.parentNode.removeChild(other.dom);
-      var $__22 = true;
-      var $__23 = false;
-      var $__24 = undefined;
+      var $__19 = true;
+      var $__20 = false;
+      var $__21 = undefined;
       try {
-        for (var $__20 = void 0,
-            $__19 = (this.cells)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__22 = ($__20 = $__19.next()).done); $__22 = true) {
-          var cell = $__20.value;
+        for (var $__17 = void 0,
+            $__16 = (this.cells)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__19 = ($__17 = $__16.next()).done); $__19 = true) {
+          var cell = $__17.value;
           {
-            var $__15 = true;
-            var $__16 = false;
-            var $__17 = undefined;
+            var $__12 = true;
+            var $__13 = false;
+            var $__14 = undefined;
             try {
-              for (var $__13 = void 0,
-                  $__12 = (this.cells)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__15 = ($__13 = $__12.next()).done); $__15 = true) {
-                var othercell = $__13.value;
+              for (var $__10 = void 0,
+                  $__9 = (this.cells)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__12 = ($__10 = $__9.next()).done); $__12 = true) {
+                var othercell = $__10.value;
                 {
                   if (othercell == cell)
                     continue;
@@ -798,33 +773,33 @@ var Jelly = (function() {
                     cell.dom.style.borderTop = 'none';
                 }
               }
-            } catch ($__18) {
-              $__16 = true;
-              $__17 = $__18;
+            } catch ($__15) {
+              $__13 = true;
+              $__14 = $__15;
             } finally {
               try {
-                if (!$__15 && $__12.return != null) {
-                  $__12.return();
+                if (!$__12 && $__9.return != null) {
+                  $__9.return();
                 }
               } finally {
-                if ($__16) {
-                  throw $__17;
+                if ($__13) {
+                  throw $__14;
                 }
               }
             }
           }
         }
-      } catch ($__25) {
-        $__23 = true;
-        $__24 = $__25;
+      } catch ($__22) {
+        $__20 = true;
+        $__21 = $__22;
       } finally {
         try {
-          if (!$__22 && $__19.return != null) {
-            $__19.return();
+          if (!$__19 && $__16.return != null) {
+            $__16.return();
           }
         } finally {
-          if ($__23) {
-            throw $__24;
+          if ($__20) {
+            throw $__21;
           }
         }
       }

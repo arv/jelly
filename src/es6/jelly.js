@@ -490,7 +490,7 @@ class Jelly {
   }
 
   cellCoords() {
-    return [for (cell of this.cells) [this.x + cell.x, this.y + cell.y]];
+    return this.cells.map((cell) => [this.x + cell.x, this.y + cell.y]);
   }
 
   slide(dir, cb) {
