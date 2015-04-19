@@ -20,7 +20,7 @@
     "url": "https://github.com/arv/jelly/issues"
   },
   "homepage": "https://github.com/arv/jelly",
-  "dependencies": {
+  "devDependencies": {
     "PEP": "git://github.com/jquery/PEP#0.2.4",
     "traceur": "0.0.88"
   }

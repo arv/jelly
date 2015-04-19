@@ -9,6 +9,8 @@ install:
 	npm install
 	cd node_modules/PointerEvents; npm install
 	cd node_modules/PointerEvents; grunt
+	cp node_modules/PointerEvents/pointerevents.min.js pointerevents.min.js
+	cp node_modules/traceur/bin/traceur-runtime.js traceur-runtime.js
 	$(MAKE) es6
 
 clean:
